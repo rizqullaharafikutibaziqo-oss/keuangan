@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoneyTrack - Ziqomatchx</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: #f3f5fa;
+  color: #20243a;
+  padding: 20px;
+}
+
+.container {
+  max-width: 650px;
+  margin: auto;
+}
+
+header {
+  margin: 15px 0 25px;
+}
+
+header h1 {
+  font-size: 27px;
+  color: #252b50;
+}
+
+header p {
+  color: #85899e;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.balance {
+  background: linear-gradient(135deg,#5556d9,#8584f5);
+  color: white;
+  padding: 25px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 25px #7777db40;
+}
+
+.balance p {
+  opacity: .8;
+  font-size: 14px;
+}
+
+.balance h2 {
+  font-size: 32px;
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.card {
+  background: white;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 3px 12px #00000008;
+  min-width: 0;
+}
+
+.card p {
+  font-size: 13px;
+  color: #888da0;
+}
+
+.card h3 {
+  margin-top: 9px;
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+
+.income { color: #18a879; }
+.expense { color: #e45c6b; }
+
+.panel {
+  background: white;
+  padding: 22px;
+  border-radius: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 12px #00000008;
+}
+
+.panel h3 {
+  margin-bottom: 17px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  margin: 12px 0 7px;
+  color: #62677c;
+}
+
+input, select {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #e1e3ed;
+  border-radius: 10px;
+  outline: none;
+  background: #fafbff;
+  font-size: 14px;
+}
+
+input:focus, select:focus {
+  border-color: #6668df;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.add-btn {
+  background: #6063dc;
+  color: white;
+  width: 100%;
+  margin-top: 18px;
+}
+
+.add-btn:active {
+  transform: scale(.98);
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.filters button {
+  background: #f0f1f8;
+  color: #555b75;
+  flex: 1;
+}
+
+.filters button.active {
+  background: #6063dc;
+  color: white;
+}
+
+.transaction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f5;
+  gap: 10px;
+}
+
+.transaction:last-child {
+  border-bottom: none;
+}
+
+.transaction small {
+  display: block;
+  color: #999daf;
+  margin-top: 5px;
+}
+
+.right {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.delete {
+  color: #e45c6b;
+  background: #fff0f1;
+  padding: 6px 9px;
+  margin-top: 5px;
+  font-size: 11px;
+}
+
+.empty {
+  text-align: center;
+  padding: 25px 5px;
+  color: #999daf;
+  font-size: 14px;
+}
+
+footer {
+  text-align: center;
+  padding: 35px 10px;
+  margin-top: 20px;
+}
+
+.brand {
+  font-size: clamp(23px, 6vw, 34px);
+  font-weight: 900;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg,#5556d9,#a17aff,#e879b9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+footer p {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #999;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+  <h1>MoneyTrack.</h1>
+  <p>Kelola keuanganmu dengan lebih mudah.</p>
+</header>
+
+<div class="balance">
+  <p>Total Saldo</p>
+  <h2 id="balance">Rp0</h2>
+</div>
+
+<div class="cards">
+  <div class="card">
+    <p>↑ Pemasukan</p>
+    <h3 class="income" id="income">Rp0</h3>
+  </div>
+
+  <div class="card">
+    <p>↓ Pengeluaran</p>
+    <h3 class="expense" id="expense">Rp0</h3>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Tambah Transaksi</h3>
+
+  <label>Jenis Transaksi</label>
+  <select id="type">
+    <option value="income">Pemasukan</option>
+    <option value="expense">Pengeluaran</option>
+  </select>
+
+  <label>Nama Transaksi</label>
+  <input id="name" type="text" placeholder="Contoh: Uang jajan">
+
+  <label>Jumlah (Rp)</label>
+  <input id="amount" type="number" placeholder="Contoh: 50000" min="1">
+
+  <label>Tanggal</label>
+  <input id="date" type="date">
+
+  <button class="add-btn" onclick="addTransaction()">
+    + Tambahkan Transaksi
+  </button>
+</div>
+
+<div class="panel">
+  <h3>Riwayat Transaksi</h3>
+
+  <div class="filters">
+    <button class="active" onclick="filterData('all',this)">Semua</button>
+    <button onclick="filterData('income',this)">Masuk</button>
+    <button onclick="filterData('expense',this)">Keluar</button>
+  </div>
+
+  <div id="history"></div>
+</div>
+
+<footer>
+  <div class="brand">MADE BY ZIQOMATCHX</div>
+  <p>MoneyTrack © 2026 · All rights reserved.</p>
+</footer>
+
+</div>
+
+<script>
+let transactions = JSON.parse(
+  localStorage.getItem("moneytrack_data") || "[]"
+);
+
+let currentFilter = "all";
+
+const rupiah = number =>
+  new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0
+  }).format(number);
+
+document.getElementById("date").value =
+  new Date().toLocaleDateString("en-CA");
+
+function saveData() {
+  localStorage.setItem(
+    "moneytrack_data",
+    JSON.stringify(transactions)
+  );
+}
+
+function addTransaction() {
+  const type = document.getElementById("type").value;
+  const name = document.getElementById("name").value.trim();
+  const amount = Number(document.getElementById("amount").value);
+  const date = document.getElementById("date").value;
+
+  if (!name || !Number.isFinite(amount) ||
+      amount <= 0 || !date) {
+    alert("Lengkapi semua data dengan benar!");
+    return;
+  }
+
+  transactions.unshift({
+    id: Date.now() + Math.random(),
+    type,
+    name,
+    amount,
+    date
+  });
+
+  saveData();
+  render();
+
+  document.getElementById("name").value = "";
+  document.getElementById("amount").value = "";
+}
+
+function deleteTransaction(id) {
+  if (!confirm("Hapus transaksi ini?")) return;
+
+  transactions = transactions.filter(
+    item => item.id !== id
+  );
+
+  saveData();
+  render();
+}
+
+function filterData(filter, button) {
+  currentFilter = filter;
+
+  document.querySelectorAll(".filters button")
+    .forEach(btn => btn.classList.remove("active"));
+
+  button.classList.add("active");
+  render();
+}
+
+function render() {
+  const totalIncome = transactions
+    .filter(t => t.type === "income")
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const totalExpense = transactions
+    .filter(t => t.type === "expense")
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  document.getElementById("balance").textContent =
+    rupiah(totalIncome - totalExpense);
+
+  document.getElementById("income").textContent =
+    rupiah(totalIncome);
+
+  document.getElementById("expense").textContent =
+    rupiah(totalExpense);
+
+  const filtered = transactions.filter(t =>
+    currentFilter === "all" || t.type === currentFilter
+  );
+
+  const history = document.getElementById("history");
+
+  if (filtered.length === 0) {
+    history.innerHTML =
+      '<div class="empty">Belum ada transaksi.</div>';
+    return;
+  }
+
+  history.innerHTML = filtered.map(t => `
+    <div class="transaction">
+      <div>
+        <strong>${escapeHTML(t.name)}</strong>
+        <small>${t.date}</small>
+      </div>
+
+      <div class="right">
+        <strong class="${t.type === 'income' ? 'income' : 'expense'}">
+          ${t.type === 'income' ? '+' : '-'}${rupiah(t.amount)}
+        </strong>
+        <br>
+        <button class="delete"
+          onclick="deleteTransaction(${t.id})">
+          Hapus
+        </button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char]);
+}
+
+render();
+</script>
+
+</body>
+  </html>
+  
